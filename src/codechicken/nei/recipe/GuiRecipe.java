@@ -3,6 +3,7 @@ package codechicken.nei.recipe;
 import codechicken.lib.gui.GuiDraw;
 import codechicken.lib.render.CCRenderState;
 import codechicken.nei.GuiNEIButton;
+import codechicken.nei.GuiRecipeTypeButton;
 import codechicken.nei.LayoutManager;
 import codechicken.nei.NEIClientConfig;
 import codechicken.nei.NEIClientUtils;
@@ -14,6 +15,7 @@ import codechicken.nei.guihook.GuiContainerManager;
 import codechicken.nei.guihook.IContainerTooltipHandler;
 import codechicken.nei.guihook.IGuiClientSide;
 import codechicken.nei.guihook.IGuiHandleMouseWheel;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -40,6 +42,8 @@ public abstract class GuiRecipe extends GuiContainer implements IGuiContainerOve
     public GuiButton prevpage;
     public GuiButton overlay1;
     public GuiButton overlay2;
+
+    public static final int HANDLER_BUTTONS_START = 10;
 
     protected GuiRecipe(GuiScreen prevgui) {
         super(new ContainerRecipe());
@@ -74,6 +78,17 @@ public abstract class GuiRecipe extends GuiContainer implements IGuiContainerOve
         if (currenthandlers.size() == 1) {
             nexttype.visible = false;
             prevtype.visible = false;
+        } else {
+            int id = HANDLER_BUTTONS_START;
+            int x = (width - xSize)/2;
+            final int w = 12;
+            for (IRecipeHandler r: currenthandlers) {
+                String label = r.getRecipeName();
+                int h = Minecraft.getMinecraft().fontRenderer.getStringWidth(label) + 4;
+                buttonList.add(new GuiRecipeTypeButton(id, x, (height - ySize) / 2 - h, 12, h, label));
+                x += w;
+                id++;
+            }
         }
         refreshPage();
     }
@@ -140,6 +155,10 @@ public abstract class GuiRecipe extends GuiContainer implements IGuiContainerOve
             case 5:
                 overlayRecipe(page * currenthandlers.get(recipetype).recipiesPerPage() + 1);
                 break;
+        default:
+            int id = guibutton.id - HANDLER_BUTTONS_START;
+            if (id >= 0 && id < currenthandlers.size())
+                recipetype = id;
         }
     }
 
