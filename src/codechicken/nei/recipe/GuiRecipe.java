@@ -125,6 +125,10 @@ public abstract class GuiRecipe extends GuiContainer implements IGuiContainerOve
 
     @Override
     protected void mouseClicked(int par1, int par2, int par3) {
+        if (par3 == 3) {
+            mc.displayGuiScreen(prevGui);
+            return;
+        }
         IRecipeHandler recipehandler = currenthandlers.get(recipetype);
         for (int recipe = page * recipehandler.recipiesPerPage(); recipe < recipehandler.numRecipes() && recipe < (page + 1) * recipehandler.recipiesPerPage(); recipe++)
             if (recipehandler.mouseClicked(this, par3, recipe))
