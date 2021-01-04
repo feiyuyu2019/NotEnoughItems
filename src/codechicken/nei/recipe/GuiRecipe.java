@@ -159,6 +159,7 @@ public abstract class GuiRecipe extends GuiContainer implements IGuiContainerOve
             int id = guibutton.id - HANDLER_BUTTONS_START;
             if (id >= 0 && id < currenthandlers.size())
                 recipetype = id;
+            page = 0;
         }
     }
 
