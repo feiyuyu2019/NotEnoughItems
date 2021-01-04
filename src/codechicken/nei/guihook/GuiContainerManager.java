@@ -344,7 +344,7 @@ public class GuiContainerManager
             inputHandler.onMouseScrolled(window, mousepos.x, mousepos.y, scrolled);
 
         for (IContainerInputHandler inputHandler : inputHandlers)
-            if (inputHandler.mouseScrolled(window, mousepos.x, mousepos.y, scrolled))
+            if (inputHandler.mouseScrolled(window, mousepos.x, mousepos.y, scrolled) && false)
                 return;
 
         if (window instanceof IGuiHandleMouseWheel)
