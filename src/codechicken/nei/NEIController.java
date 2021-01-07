@@ -230,7 +230,7 @@ public class NEIController implements IContainerSlotClickHandler, IContainerInpu
         Point mousePos = getMousePosition();
         Slot mouseover = manager.window.getSlotAtPosition(mousePos.x, mousePos.y);
         if (mouseover != null && mouseover.getHasStack()) {
-            if (scrolled > 0)
+            if (scrolled < 0)
                 fastTransferManager.transferItem(manager.window, mouseover.slotNumber);
             else
                 fastTransferManager.retrieveItem(manager.window, mouseover.slotNumber);
