@@ -2,6 +2,7 @@ package codechicken.nei.recipe;
 
 import codechicken.lib.gui.GuiDraw;
 import codechicken.lib.render.CCRenderState;
+import codechicken.lib.vec.Rectangle4i;
 import codechicken.nei.GuiNEIButton;
 import codechicken.nei.GuiRecipeTypeButton;
 import codechicken.nei.LayoutManager;
@@ -176,6 +177,20 @@ public abstract class GuiRecipe extends GuiContainer implements IGuiContainerOve
 
     @Override
     public List<String> handleTooltip(GuiContainer gui, int mousex, int mousey, List<String> currenttip) {
+        if (mousey <= (height - ySize) / 2) {
+            for (GuiButton b: (List<GuiButton>)buttonList) {
+                int id = b.id - HANDLER_BUTTONS_START;
+                if (!(id >= 0 && id < currenthandlers.size()))
+                    continue;
+                if (new Rectangle4i(b.xPosition, b.yPosition, b.width, b.height).contains(mousex, mousey)) {
+                    currenttip.add(currenthandlers.get(id).getClass().getName());
+                }
+            }
+        } else if (mousey > (height - ySize) / 2 + 3 && mousey < (height - ySize) / 2 + 15  &&
+                   mousex > (width - xSize) / 2 && mousex < (width + xSize) / 2) {
+            currenttip.add(currenthandlers.get(recipetype).getClass().getName());
+        }
+
         IRecipeHandler recipehandler = currenthandlers.get(recipetype);
         for (int i = page * recipehandler.recipiesPerPage(); i < recipehandler.numRecipes() && i < (page + 1) * recipehandler.recipiesPerPage(); i++)
             currenttip = recipehandler.handleTooltip(this, currenttip, i);
